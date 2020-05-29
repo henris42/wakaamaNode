@@ -47,10 +47,20 @@ int lwm2m_strncmp(const char * s1,
     return strncmp(s1, s2, n);
 }
 
+int prev,curr,offset_count;
+
 time_t lwm2m_gettime(void)
 {
     // Convert system time in us to s.
-    return system_get_time()/1000/1000;
+   prev = curr;
+   curr = system_get_time()/1000/1000 + offset_count * 4295;
+   if(prev > curr) 
+   {
+    offset_count++;
+	curr+=4295;
+    }
+ return curr;
+
 }
 
 #ifdef LWM2M_WITH_LOGS
